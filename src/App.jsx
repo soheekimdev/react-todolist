@@ -1,12 +1,18 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import Clock from './components/Clock';
 import StopWatch from './components/Stopwatch';
 import Timer from './components/Timer';
 import Advice from './components/Advice';
+import useFetch from './hooks/useFetch';
 
 const App = () => {
-  const [todolist, setTodolist] = useState([{ id: Number(new Date()), content: '안녕하세요' }]);
+  const [isLoading, data] = useFetch('http://localhost:3000/todo');
+  const [todolist, setTodolist] = useState([]);
+
+  useEffect(() => {
+    if (data) setTodolist(data);
+  }, [isLoading]);
 
   return (
     <>
@@ -24,8 +30,13 @@ const TodoInput = ({ setTodolist }) => {
   const inputRef = useRef(null);
 
   const addTodo = () => {
-    const newTodo = { id: Number(new Date()), content: inputRef.current.value };
-    setTodolist((prev) => [...prev, newTodo]);
+    const newTodo = { content: inputRef.current.value };
+    fetch('http://localhost:3000/todo', {
+      method: 'POST',
+      body: JSON.stringify(newTodo),
+    })
+      .then((res) => res.json())
+      .then((res) => setTodolist((prev) => [...prev, res]));
     inputRef.current.value = '';
   };
 
@@ -59,7 +70,13 @@ const Todo = ({ todo, setTodolist }) => {
   };
 
   const removeTodo = () => {
-    setTodolist((prev) => prev.filter((el) => el.id !== todo.id));
+    fetch(`http://localhost:3000/todo/${todo.id}`, {
+      method: 'DELETE',
+    }).then((res) => {
+      if (res.ok) {
+        setTodolist((prev) => prev.filter((el) => el.id !== todo.id));
+      }
+    });
   };
 
   return (
