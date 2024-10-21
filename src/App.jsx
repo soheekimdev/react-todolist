@@ -11,6 +11,7 @@ const App = () => {
       <Timer />
       <TodoInput setTodolist={setTodolist} />
       <TodoList todolist={todolist} setTodolist={setTodolist} />
+      <Advice />
     </>
   );
 };
@@ -177,6 +178,38 @@ const Timer = () => {
       <input type="range" max="3600" step="30" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
       <div></div>
     </div>
+  );
+};
+
+const useFetch = (url) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        setData(res);
+        setIsLoading(false);
+      });
+  }, [url]);
+
+  return [isLoading, data];
+};
+
+const Advice = () => {
+  const [isLoading, data] = useFetch('https://korean-advice-open-api.vercel.app/api/advice');
+
+  return (
+    <>
+      {!isLoading && (
+        <>
+          <div>{data.message}</div>
+          <div>-{data.author}-</div>
+        </>
+      )}
+      <button>명언 새로고침</button>
+    </>
   );
 };
 
