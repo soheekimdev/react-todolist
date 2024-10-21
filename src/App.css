@@ -27,7 +27,7 @@ button {
 input {
   padding: 5px;
 }
-input[type="text"] {
+input[type='text'] {
   width: 70%;
 }
 ul {
@@ -37,8 +37,12 @@ ul {
 li {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
   padding: 10px;
   border-bottom: 1px solid gray;
+}
+li input {
+  flex: 1;
 }
 li > div:last-child {
   display: flex;
