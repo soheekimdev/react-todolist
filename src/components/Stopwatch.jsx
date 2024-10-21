@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { formatTime } from '../utils/timeUtils';
 
-const StopWatch = () => {
-  const [time, setTime] = useState(0);
+const StopWatch = ({ time, setTime }) => {
   const [isOn, setIsOn] = useState(false);
   const timerRef = useRef(null);
 
@@ -18,7 +17,7 @@ const StopWatch = () => {
   }, [isOn]);
 
   return (
-    <div>
+    <div className="flex">
       {formatTime(time)}
       <button
         onClick={() => {

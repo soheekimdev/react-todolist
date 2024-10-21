@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { formatTime } from '../utils/timeUtils';
 
-const Timer = () => {
+const Timer = ({ time, setTime }) => {
   const [startTime, setStartTime] = useState(0);
   const [isOn, setIsOn] = useState(false);
-  const [time, setTime] = useState(0);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const Timer = () => {
 
   return (
     <div>
-      <div>
+      <div className="flex">
         {time ? formatTime(time) : formatTime(startTime)}
         <button
           onClick={() => {
